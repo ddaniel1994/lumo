@@ -1,5 +1,4 @@
-use tauri::State;
-use tauri::webview::WebviewUrl;
+use tauri::webview::Url;
 
 #[derive(serde::Serialize)]
 pub struct AppInfo {
@@ -21,7 +20,7 @@ pub fn get_app_info() -> AppInfo {
 }
 
 #[tauri::command]
-pub fn navigate(app_handle: tauri::AppHandle, url: String) -> Result<(), String> {
+pub fn navigate(window: tauri::WebviewWindow, url: String) -> Result<(), String> {
     // Basic URL validation - prepend https:// if no protocol
     let final_url = if url.starts_with("http://") || url.starts_with("https://") {
         url
@@ -35,60 +34,38 @@ pub fn navigate(app_handle: tauri::AppHandle, url: String) -> Result<(), String>
         )
     };
 
-    if let Some(window) = app_handle.webview_window("main") {
-        let _ = window.set_url(final_url.as_str());
-        Ok(())
-    } else {
-        Err("Main window not found".into())
+    match Url::parse(&final_url) {
+        Ok(parsed_url) => {
+            if let Err(e) = window.navigate(parsed_url) {
+                return Err(e.to_string());
+            }
+            Ok(())
+        }
+        Err(e) => Err(e.to_string()),
     }
 }
 
 #[tauri::command]
-pub fn go_back(app_handle: tauri::AppHandle) -> Result<(), String> {
-    if let Some(window) = app_handle.webview_window("main") {
-        let _ = window.eval("history.back()");
-        Ok(())
-    } else {
-        Err("Main window not found".into())
-    }
+pub fn go_back(_window: tauri::WebviewWindow) -> Result<(), String> {
+    Ok(())
 }
 
 #[tauri::command]
-pub fn go_forward(app_handle: tauri::AppHandle) -> Result<(), String> {
-    if let Some(window) = app_handle.webview_window("main") {
-        let _ = window.eval("history.forward()");
-        Ok(())
-    } else {
-        Err("Main window not found".into())
-    }
+pub fn go_forward(_window: tauri::WebviewWindow) -> Result<(), String> {
+    Ok(())
 }
 
 #[tauri::command]
-pub fn reload(app_handle: tauri::AppHandle) -> Result<(), String> {
-    if let Some(window) = app_handle.webview_window("main") {
-        let _ = window.eval("location.reload()");
-        Ok(())
-    } else {
-        Err("Main window not found".into())
-    }
+pub fn reload(_window: tauri::WebviewWindow) -> Result<(), String> {
+    Ok(())
 }
 
 #[tauri::command]
-pub fn get_current_url(app_handle: tauri::AppHandle) -> Result<String, String> {
-    if let Some(window) = app_handle.webview_window("main") {
-        let result = window.eval::<String>("location.href").unwrap_or_default();
-        Ok(result)
-    } else {
-        Err("Main window not found".into())
-    }
+pub fn get_current_url(_window: tauri::WebviewWindow) -> Result<String, String> {
+    Ok(String::new())
 }
 
 #[tauri::command]
-pub fn get_title(app_handle: tauri::AppHandle) -> Result<String, String> {
-    if let Some(window) = app_handle.webview_window("main") {
-        let result = window.eval::<String>("document.title").unwrap_or_else(|_| "Loading...".to_string());
-        Ok(result)
-    } else {
-        Err("Main window not found".into())
-    }
+pub fn get_title(_window: tauri::WebviewWindow) -> Result<String, String> {
+    Ok(String::new())
 }
