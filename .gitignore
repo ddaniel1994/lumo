@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+src-tauri/target/
+
+# Tauri dev artifacts
+*.tauri/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.p12
+*.key
+
+# Misc
+*.log
+tmp/
+temp/
+
+# macOS (not a v1 target, but keep repo clean)
+.DS_Store

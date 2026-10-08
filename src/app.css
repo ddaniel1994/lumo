@@ -1,0 +1,24 @@
+:root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --border: #e5e5e5;
+  --text: #1a1a1a;
+  --text-muted: #6b6b6b;
+  --accent: #4f6af5;
+
+  --radius: 5px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+
+  font-family: system-ui, -apple-system, "Segoe UI", Inter, "Ubuntu", "Noto Sans", sans-serif;
+}
+
+.dark {
+  --bg: #1a1a1e;
+  --surface: #252529;
+  --border: #333338;
+  --text: #e8e8e8;
+  --text-muted: #a3a3a3;
+}
