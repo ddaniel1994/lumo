@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=LBP Browser
+Comment=Lightweight browser for Windows and Linux
+Exec=lbp-browser
+Icon=/home/ddaniel/lumo/src-tauri/icons/128x128.png
+Terminal=false
+Type=Application
+Categories=Network;WebBrowser;
+Keywords=browser;web;html;
+StartupWMClass=lbp-browser

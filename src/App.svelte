@@ -2,7 +2,7 @@
   import { invoke } from "@tauri-apps/api/core";
   import { onMount } from "svelte";
 
-  let appName = "LBP Browser";
+  let appName = "Lumo Browser";
   let appVersion = "0.1.0";
   let loading = true;
   let url = "";
@@ -66,7 +66,7 @@
   <!-- Top toolbar -->
   <header class="toolbar">
     <div class="brand">
-      <span class="brand-mark">LBP</span>
+      <span class="brand-mark">Lumo</span>
       <span class="brand-ver">{appVersion}</span>
     </div>
 
@@ -106,7 +106,7 @@
   <!-- Main content: webview area -->
   <main class="content">
     {#if loading}
-      <div class="loading">Loading LBP shell…</div>
+      <div class="loading">Loading Lumo shell…</div>
     {:else}
       <!-- Content is rendered by Tauri's webview (main window) -->
       <div class="content-area">

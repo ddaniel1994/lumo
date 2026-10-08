@@ -1,18 +1,19 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "LBP Browser",
+  "productName": "Lumo Browser",
   "version": "0.1.0",
-  "identifier": "com.lbp.browser",
+  "identifier": "com.loumo.browser",
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
-    "devUrl": "http://localhost:5173"
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../dist"
   },
   "app": {
     "windows": [
       {
         "label": "main",
-        "title": "LBP Browser",
+        "title": "Lumo Browser",
         "width": 1200,
         "height": 800,
         "minWidth": 900,
@@ -43,7 +44,7 @@
     "resources": [],
     "category": "Utility",
     "shortDescription": "Lightweight browser for Windows and Linux",
-    "longDescription": "LBP is a lightweight, fast browser for Windows and Linux.",
+    "longDescription": "Lumo is a lightweight, fast browser for Windows and Linux.",
     "windows": {
       "certificateThumbprint": null,
       "digestAlgorithm": "sha256",
