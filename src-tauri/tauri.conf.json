@@ -12,6 +12,7 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "LBP Browser",
         "width": 1200,
         "height": 800,
@@ -21,7 +22,8 @@
         "fullscreen": false,
         "center": true,
         "decorations": true,
-        "transparent": false
+        "transparent": false,
+        "url": "/"
       }
     ],
     "security": {

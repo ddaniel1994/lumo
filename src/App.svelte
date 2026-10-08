@@ -5,6 +5,8 @@
   let appName = "LBP Browser";
   let appVersion = "0.1.0";
   let loading = true;
+  let url = "";
+  let statusText = "Ready";
 
   onMount(async () => {
     try {
@@ -18,12 +20,45 @@
     }
   });
 
-  let url = "";
-  let statusText = "Ready";
-
-  function navigate() {
+  async function navigate() {
     if (!url.trim()) return;
-    statusText = `Navigating to ${url}`;
+    try {
+      await invoke("navigate", { url: url });
+      statusText = `Navigating to ${url}`;
+    } catch (err) {
+      statusText = `Navigation failed: ${err}`;
+    }
+  }
+
+  async function handleBack() {
+    try {
+      await invoke("go_back");
+    } catch (err) {
+      console.error("Back failed:", err);
+    }
+  }
+
+  async function handleForward() {
+    try {
+      await invoke("go_forward");
+    } catch (err) {
+      console.error("Forward failed:", err);
+    }
+  }
+
+  async function handleReload() {
+    try {
+      await invoke("reload");
+      statusText = "Reloading...";
+    } catch (err) {
+      console.error("Reload failed:", err);
+    }
+  }
+
+  function handleUrlKeydown(event: KeyboardEvent) {
+    if (event.key === "Enter") {
+      navigate();
+    }
   }
 </script>
 
@@ -39,19 +74,16 @@
       <input
         type="text"
         placeholder="Search or enter URL"
-        bind:value={url}
-        onkeydown={(e) => {
-          if (e.key === "Enter") {
-            navigate();
-          }
-        }}
+        value={url}
+        oninput={(e) => url = (e.target as HTMLInputElement).value}
+        onkeydown={handleUrlKeydown}
       />
     </div>
 
     <nav class="toolbar-actions">
-      <button class="icon-btn" title="Back">←</button>
-      <button class="icon-btn" title="Forward">→</button>
-      <button class="icon-btn" title="Reload">↻</button>
+      <button class="icon-btn" title="Back" onclick={handleBack}>←</button>
+      <button class="icon-btn" title="Forward" onclick={handleForward}>→</button>
+      <button class="icon-btn" title="Reload" onclick={handleReload}>↻</button>
       <span class="toolbar-spacer"></span>
       <button class="icon-btn" title="Bookmarks (future)" disabled>★</button>
       <button class="icon-btn" title="Downloads (future)" disabled>⬇</button>
@@ -76,15 +108,9 @@
     {#if loading}
       <div class="loading">Loading LBP shell…</div>
     {:else}
-      <div class="webview-placeholder">
-        <!-- Phase 1: embed the main WebView here via Tauri webview window/embed. -->
-        <div class="placeholder-card">
-          <h2>LBP Browser shell</h2>
-          <p>Frontend shell is loaded. The main WebView will be embedded in Phase 1.</p>
-          <ul>
-            <li><a href="/requirements">Local preview of requirements</a></li>
-          </ul>
-        </div>
+      <!-- Content is rendered by Tauri's webview (main window) -->
+      <div class="content-area">
+        <!-- The actual web content is displayed by Tauri's webview -->
       </div>
     {/if}
   </main>
@@ -209,29 +235,10 @@
     color: var(--text-muted);
   }
 
-  .webview-placeholder {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .placeholder-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: var(--spacing-lg) var(--spacing-xl);
-    max-width: 480px;
-    text-align: center;
-  }
-
-  .placeholder-card h2 {
-    margin: 0 0 var(--spacing-sm);
-  }
-
-  .placeholder-card p {
-    margin: 0 0 var(--spacing-md);
-    color: var(--text-muted);
+  .content-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
   }
 
   .statusbar {
